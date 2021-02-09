@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,6 +14,8 @@
 		CB4C4A9025D21BE5004DABE7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB4C4A8E25D21BE5004DABE7 /* Main.storyboard */; };
 		CB4C4A9225D21BE6004DABE7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB4C4A9125D21BE6004DABE7 /* Assets.xcassets */; };
 		CB4C4A9525D21BE6004DABE7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB4C4A9325D21BE6004DABE7 /* LaunchScreen.storyboard */; };
+		CB4C4AA525D21E2B004DABE7 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4C4AA425D21E2B004DABE7 /* Event.swift */; };
+		CB4C4AAE25D2263D004DABE7 /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4C4AAD25D2263D004DABE7 /* EventViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		CB4C4A9125D21BE6004DABE7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CB4C4A9425D21BE6004DABE7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CB4C4A9625D21BE6004DABE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CB4C4AA425D21E2B004DABE7 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		CB4C4AAD25D2263D004DABE7 /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +78,8 @@
 				CB4C4A8825D21BE5004DABE7 /* AppDelegate.swift */,
 				CB4C4A8A25D21BE5004DABE7 /* SceneDelegate.swift */,
 				CB4C4A8C25D21BE5004DABE7 /* ViewController.swift */,
+				CB4C4AAD25D2263D004DABE7 /* EventViewController.swift */,
+				CB4C4AA425D21E2B004DABE7 /* Event.swift */,
 				CB4C4A8E25D21BE5004DABE7 /* Main.storyboard */,
 				CB4C4A9125D21BE6004DABE7 /* Assets.xcassets */,
 				CB4C4A9325D21BE6004DABE7 /* LaunchScreen.storyboard */,
@@ -88,7 +94,6 @@
 				BA07E384BD618DCB677BABA8 /* Pods-Calendar_App.debug.xcconfig */,
 				83D98520F9F8D87C22436EC2 /* Pods-Calendar_App.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -206,6 +211,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB4C4AAE25D2263D004DABE7 /* EventViewController.swift in Sources */,
+				CB4C4AA525D21E2B004DABE7 /* Event.swift in Sources */,
 				CB4C4A8D25D21BE5004DABE7 /* ViewController.swift in Sources */,
 				CB4C4A8925D21BE5004DABE7 /* AppDelegate.swift in Sources */,
 				CB4C4A8B25D21BE5004DABE7 /* SceneDelegate.swift in Sources */,
