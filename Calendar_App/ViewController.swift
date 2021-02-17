@@ -14,28 +14,41 @@ import RealmSwift
 let w = UIScreen.main.bounds.size.width
 let h = UIScreen.main.bounds.size.height
 
-class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
+
+
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource,FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
+    
+    
 
     //スケジュール内容
-    let labelDate = UILabel(frame: CGRect(x: 5, y: 580, width: 400, height: 50))
+    let labelDate = UILabel(frame: CGRect(x: 5, y: 500, width: 400, height: 50))
     //主なスケジュールの表示
-    let labelTitle = UILabel(frame: CGRect(x: 0, y: 530, width: 180, height: 50))
+    let labelTitle = UILabel(frame: CGRect(x: 0, y: 450, width: 180, height: 50))
     //　カレンダー部分
-    let dateView = FSCalendar(frame: CGRect(x: 0, y: 30, width: w, height: 400))
+    let dateView = FSCalendar(frame: CGRect(x: 0, y: 30, width: w, height: 350))
     // 日付の表示
-    let Date = UILabel(frame: CGRect(x: 5, y: 430, width: 200, height: 100))
+    let Date = UILabel(frame: CGRect(x: 5, y: 370, width: 200, height: 80))
     
+    var datesWithEvents: Set<String> = []
+    
+    // タップした日付を入れる変数
+    var selectedDate = ""
+    
+    
+    var list: Results<Event>!
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
         
         // カレンダーの設定
         self.dateView.dataSource = self
         self.dateView.delegate = self
         self.dateView.today = nil
         self.dateView.tintColor = .red
-        self.view.backgroundColor = .white
-        dateView.backgroundColor = .white
+        self.view.backgroundColor = .systemYellow
+        dateView.backgroundColor = .clear
+        dateView.calendarHeaderView.tintColor = .clear
         view.addSubview(dateView)
         
         // 日付表示設定
@@ -56,16 +69,61 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         view.addSubview(labelDate)
         
         // スケジュール追加ボタン
-        let addBtn = UIButton(frame: CGRect(x: w - 90, y: h - 90, width: 60, height: 60))
+        let addBtn = UIButton(frame: CGRect(x: w - 90, y: h - 150, width: 60, height: 60))
         addBtn.setTitle("+", for: UIControl.State())
         addBtn.setTitleColor(.white, for: UIControl.State())
-        addBtn.backgroundColor = .orange
+        addBtn.backgroundColor = .blue
         addBtn.layer.cornerRadius = 30.0
+        addBtn.layer.shadowOpacity = 0.5
+        addBtn.layer.shadowOffset = CGSize(width: 2, height: 2)
         addBtn.addTarget(self, action: #selector(onClick(_:)), for: .touchUpInside)
         view.addSubview(addBtn)
         
         print(Realm.Configuration.defaultConfiguration.fileURL)
+        
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.dateView.reloadData()
+        
+    }
+
+//    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
+//
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "yyyy/MM/dd"
+//        formatter.calendar = Calendar(identifier: .gregorian)
+//        formatter.timeZone = TimeZone.current
+//        formatter.locale = Locale.current
+//        let calendarDay = formatter.string(from: date)
+//
+//        // Realmオブジェクトの生成
+//        let realm = try! Realm()
+//        // 参照（全データ）を取得
+//        let events = realm.objects(Event.self)
+//
+//        if events.count > 0 {
+//            for i in 0 ..< events.count {
+//                if i == 0 {
+//                    datesWithEvents = [events[i].date]
+//                } else {
+//                    datesWithEvents.insert(events[i].date)
+//                }
+//            }
+//        } else {
+//            datesWithEvents = []
+//        }
+//
+//        return datesWithEvents.contains(calendarDay) ? 1 : 0
+//
+//
+//    }
+    
+    
+    
+    
+    
     
     fileprivate let gregorian: Calendar = Calendar(identifier: .gregorian)
     fileprivate lazy var dateFormatter: DateFormatter = {
@@ -132,14 +190,16 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
     // カレンダー処理
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         
-        labelTitle.text = "主なスケジュール"
-        labelTitle.backgroundColor = .orange
+        labelTitle.text = "スケジュール"
+        labelTitle.textColor = .white
+        labelTitle.backgroundColor = .blue
+        labelTitle.layer.cornerRadius = 10.0
         view.addSubview(labelTitle)
         
         //予定あり場合DBから取得表示
         //なしの場合「予定なし」を表示
         labelDate.text = "予定なし"
-        labelDate.textColor = .lightGray
+        labelDate.textColor = .gray
         view.addSubview(labelDate)
         
         let tmpDate = Calendar(identifier: .gregorian)
@@ -149,10 +209,10 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         let m = String(format: "%02d", month)
         let d = String(format: "%02d", day)
         
-        let da = "\(year)/\(m)/\(d)/"
+        let da = "\(year)/\(m)/\(d)"
         
         // クリックで日付を表示
-        Date.text = "\(m)/\(d)/"
+        Date.text = "\(m)/\(d)"
         view.addSubview(Date)
         
         //　スケジュールの取得
@@ -160,13 +220,26 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         var result = realm.objects(Event.self)
         result = result.filter("date = '\(da)'")
         
-        for event in result {
-            if event.date == da {
-                labelDate.text = event.event
+        for ev in result {
+            if ev.date == da {
+                labelDate.text = ev.event
                 labelDate.textColor = .black
                 view.addSubview(labelDate)
             }
         }
     }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return list.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "calendarsCell", for: indexPath)
+        cell.textLabel!.text = list[indexPath.row].event
+        return cell
+    }
+    
+    
 }
+
 

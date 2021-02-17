@@ -42,14 +42,17 @@ class EventViewController: UIViewController {
         datePicker.addTarget(self, action: #selector(picker(_:)), for: .valueChanged)
         view.addSubview(datePicker)
         
+        
         // 入力ボタン
-        let eventInsert = UIButton(frame: CGRect(x: (w2 - 200) / 2, y: 500, width: 200, height: 50))
+        let eventInsert = UIButton(frame: CGRect(x: (w2 - 200) / 2, y: 480, width: 200, height: 40))
         eventInsert.setTitle("入力", for: UIControl.State())
         eventInsert.setTitleColor(.blue, for: UIControl.State())
         eventInsert.backgroundColor = .white
         eventInsert.layer.cornerRadius = 10.0
         eventInsert.layer.borderColor = UIColor.orange.cgColor
         eventInsert.layer.borderWidth = 1.0
+        eventInsert.layer.shadowOpacity = 0.5
+        eventInsert.layer.shadowOffset = CGSize(width: 2, height: 2)
         eventInsert.addTarget(self, action: #selector(saveEvent(_:)), for: .touchUpInside)
         view.addSubview(eventInsert)
         
@@ -61,6 +64,8 @@ class EventViewController: UIViewController {
         backButton.layer.cornerRadius = 10.0
         backButton.layer.borderWidth = 1.0
         backButton.layer.borderColor = UIColor.orange.cgColor
+        backButton.layer.shadowOpacity = 0.5
+        backButton.layer.shadowOffset = CGSize(width: 2, height: 2)
         backButton.addTarget(self, action: #selector(onBackClick(_:)), for: .touchUpInside)
         view.addSubview(backButton)
         
@@ -68,7 +73,18 @@ class EventViewController: UIViewController {
         formatter.dateFormat = "yyyy/MM/dd"
         date_text.text = formatter.string(from: datePicker.date)
         
+        //タップでキーボードを下げる
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        self.view.addGestureRecognizer(tapGesture)
+        //下にスワイプでキーボードを下げる
+        let swipeDownGesture = UISwipeGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        swipeDownGesture.direction = .down
+        self.view.addGestureRecognizer(swipeDownGesture)
         }
+    
+    @objc func dismissKeyboard() {
+        self.view.endEditing(true)
+    }
     
     // 画面遷移(toppage)
     @objc func onBackClick(_: UIButton) {
@@ -80,7 +96,7 @@ class EventViewController: UIViewController {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd"
         date_text.text = formatter.string(from: sender.date)
-        view.addSubview(date_text)
+//        view.addSubview(date_text)
     }
     
     // DBへの書き込み処理
